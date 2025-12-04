@@ -141,10 +141,12 @@ public class BaseClass {
 
     // iframe
     public void switchToFrame(WebElement frame) {
+
         driver.switchTo().frame(frame);
     }
 
     public void switchToDefaultContent() {
+
         driver.switchTo().defaultContent();
     }
 }

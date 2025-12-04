@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="SkillsHub Automation Suite" verbose="1" parallel="false">
+<suite name="SimpleTherapy Automation Suite" verbose="1" parallel="false">
     <listeners>
         <listener class-name="com.SimpleTherapy.web.utils.ExtentReportListener"/>
     </listeners>
     <test name="End-to-End Flow Tests">
         <classes>
-            <class name="Test.com.SimpleTherapy.web.DashboardPageTest"/>
-            <class name="Test.com.SimpleTherapy.web.InstitutionPageTest"/>
-            <class name="Test.com.SimpleTherapy.web.FacultyPageTest"/>
+            <class name="com.SimpleTherapy.web.Test.LandingPageTest"/>
+            <class name="com.SimpleTherapy.web.Test.ConsentPageTest"></class>
         </classes>
     </test>
 </suite>

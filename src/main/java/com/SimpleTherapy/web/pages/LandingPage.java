@@ -5,7 +5,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class LandingPage extends BaseClass {
-
     // ======================= Page Elements =======================
     @FindBy(xpath = "//h1[text()='Welcome to SimpleTherapy']")
     WebElement titleHeading;
@@ -49,11 +48,6 @@ public class LandingPage extends BaseClass {
     @FindBy(name = "username")
     WebElement emailInput;
 
-
-
-
-
-
     // Constructor
     public LandingPage() {
         PageFactory.initElements(driver, this);
@@ -75,6 +69,10 @@ public class LandingPage extends BaseClass {
 
     public WebElement getContinueButton() {
         return continueBtn;
+    }
+
+    public void clickContinueButton() {
+        click(continueBtn);
     }
 
     public void clickHereForHelp () {

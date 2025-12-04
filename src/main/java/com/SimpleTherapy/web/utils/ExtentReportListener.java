@@ -48,12 +48,12 @@ public class ExtentReportListener extends BaseClass implements ITestListener {
 
         ExtentSparkReporter spark = new ExtentSparkReporter(reportpath);
         spark.config().setDocumentTitle("Automation Test Report");
-        spark.config().setReportName("SkillsHub Test Execution Report");
+        spark.config().setReportName("SimpleTherapy Test Execution Report");
         spark.config().setTheme(Theme.STANDARD);
 
         extent = new ExtentReports();
         extent.attachReporter(spark);
-        extent.setSystemInfo("Project Name", "SkillsHub");
+        extent.setSystemInfo("Project Name", "SimpleTherapy");
         extent.setSystemInfo("User Name",System.getProperty("user.name"));
         extent.setSystemInfo("Browser", BaseClass.browserName);
         extent.setSystemInfo("Tester", "Snehal Kadam");
@@ -87,9 +87,7 @@ public class ExtentReportListener extends BaseClass implements ITestListener {
             String screenshotPath = captureScreenshot(result.getMethod().getMethodName());
             test.get().addScreenCaptureFromPath(screenshotPath);
         }
-
     }
-
 
     @Override
     public void onTestSkipped(ITestResult result) {
@@ -137,7 +135,7 @@ public class ExtentReportListener extends BaseClass implements ITestListener {
         final String password = "wxwrwmcygsesvyjl";
 
         String to = "snehal@mobiuso.com";
-        String cc = "akshay@mobiuso.com";
+        String cc = "akshay@mobiuso.com, sagar@mobiuso.com";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -158,7 +156,7 @@ public class ExtentReportListener extends BaseClass implements ITestListener {
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(cc));
-            message.setSubject("SkillsHub Automation Test Report");
+            message.setSubject("SimpleTherapy Automation Test Report");
 
             // ✅ Email Body
             String body = "<h3>Test Execution Summary</h3>"
