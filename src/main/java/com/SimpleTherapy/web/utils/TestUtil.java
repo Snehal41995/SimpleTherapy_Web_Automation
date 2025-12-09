@@ -1,4 +1,4 @@
-package com.SimpleTherapy.web.utils;
+package com.simpleTherapy.web.utils;
 
 public class TestUtil {
   //  public static long PAGE_LONG_TIMEOUT = 40;

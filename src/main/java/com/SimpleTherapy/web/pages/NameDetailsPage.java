@@ -1,4 +1,4 @@
-package com.SimpleTherapy.web.pages;
+package com.simpleTherapy.web.pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -32,21 +32,20 @@ public class NameDetailsPage extends BaseClass {
 
     public void enterFirstName(String fName) {
         firstName.clear();
-        firstName.sendKeys(fName);
+        sendKeys(firstName, fName);
     }
 
     public void enterLastName(String lName) {
         lastName.clear();
-        lastName.sendKeys(lName);
+        sendKeys(lastName, lName);
     }
 
     public void enterPrefName(String pName) {
         prefName.clear();
-        prefName.sendKeys(pName);
+        sendKeys(prefName, pName);
     }
 
     public void clickContinueBtn() {
         click(continueBtn);
     }
-
 }

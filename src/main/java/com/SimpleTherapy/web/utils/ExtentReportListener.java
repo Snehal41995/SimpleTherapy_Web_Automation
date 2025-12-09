@@ -1,6 +1,6 @@
-package com.SimpleTherapy.web.utils;
+package com.simpleTherapy.web.utils;
 
-import com.SimpleTherapy.web.pages.BaseClass;
+import com.simpleTherapy.web.pages.BaseClass;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
@@ -38,6 +38,10 @@ public class ExtentReportListener extends BaseClass implements ITestListener {
     // Link driver from BaseClass
     public static void setDriver(WebDriver driverRef) {
         driver = driverRef;
+    }
+
+    public static synchronized ExtentTest getTest() {
+        return (ExtentTest) test.get();
     }
 
     @Override

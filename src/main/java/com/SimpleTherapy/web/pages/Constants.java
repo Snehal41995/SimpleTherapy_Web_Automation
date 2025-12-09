@@ -1,4 +1,4 @@
-package com.SimpleTherapy.web.pages;
+package com.simpleTherapy.web.pages;
 
 import java.io.File;
 
@@ -8,7 +8,7 @@ public class Constants {
     public static final String ConfigFile_Path =
             System.getProperty("user.dir") + File.separator + "src" + File.separator +
                     "main" + File.separator + "java" + File.separator + "com" +
-                    File.separator + "SimpleTherapy" + File.separator + "web" +
+                    File.separator + "simpleTherapy" + File.separator + "web" +
                     File.separator + "config" + File.separator + "config.properties";
 
     // Excel test data path

@@ -1,8 +1,11 @@
-package com.SimpleTherapy.web.pages;
+package com.simpleTherapy.web.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import java.util.List;
 
 public class LandingPage extends BaseClass {
     // ======================= Page Elements =======================
@@ -25,22 +28,31 @@ public class LandingPage extends BaseClass {
     WebElement intercomFrame;
 
     @FindBy(xpath = "//p[contains(text(), \"We're here to answer your questions\")]")
-    WebElement operatorHeading;
+    WebElement chatBotHeading;
 
     @FindBy(xpath = "//div[@data-testid='close-button']")
-    WebElement operatorCloseBtn;
+    WebElement chatBotCloseBtn;
 
     @FindBy(xpath = "//a[@role='button']")
-    WebElement loginHereBtn;
+    WebElement loginHereLink;
 
     @FindBy(xpath = "//span[normalize-space()='Need Help?']")
     WebElement needHelpBtn;
 
     @FindBy(xpath = "//h4[text()='Need Help? Call us at']")
-    WebElement popupHeading;
+    WebElement needHelpPopupHeading;
 
     @FindBy(xpath = "//button[contains(@class,'top-3') and contains(@class,'right-3')]")
-    WebElement closePopupBtn;
+    WebElement needHelpClosePopupBtn;
+
+    @FindBy(xpath = "//*[@id='langSelector']")
+    WebElement languageDropdown;
+
+    @FindBy(css = "ul li")
+    List<WebElement> allLanguages;
+
+    @FindBy(css = "h1")
+    WebElement pageHeading;
 
     @FindBy(xpath = "//span[contains(text(),'Member Login')]")
     WebElement memberLoginLink;
@@ -54,70 +66,89 @@ public class LandingPage extends BaseClass {
     }
 
     // ======================= Page Actions =======================
-    public String getTitle() {
+    public String getTitleHeading() {
         return titleHeading.getText();
     }
 
     public void selectEmployer(String employer) {
-        employerInput.sendKeys(employer);
-        employerDropdownOption.click();
+        sendKeys(employerInput, employer);
+        click(employerDropdownOption);
     }
 
-    public boolean isContinueButtonEnabled() {
+    public boolean isContinueBtnEnabled() {
         return continueBtn.isEnabled();
     }
 
-    public WebElement getContinueButton() {
-        return continueBtn;
-    }
-
-    public void clickContinueButton() {
+    public void clickContinueBtn() {
         click(continueBtn);
     }
 
-    public void clickHereForHelp () {
+    public void clickHereForHelpLink() {
         click(helpLink);
     }
 
-    public String getOperatorHeading() {
-        driver.switchTo().frame(intercomFrame);
-        String text = operatorHeading.getText();
-        driver.switchTo().defaultContent();  
+    public String getChatBotHeading() {
+        switchToFrame(intercomFrame);
+        String text = chatBotHeading.getText();
+        switchToDefault();
         return text;
     }
 
-    public void closeOperator() {
-        driver.switchTo().frame(intercomFrame);
-        operatorCloseBtn.click();
-        driver.switchTo().defaultContent();
+    public void closeChatBot() {
+        switchToFrame(intercomFrame);
+        click(chatBotCloseBtn);
+        switchToDefault();
     }
 
-    public void clickLoginHere() {
-        click(loginHereBtn);
+    public void clickLoginHereLink() {
+        click(loginHereLink);
     }
 
-    public void clickNeedHelp() {
+    public void clickNeedHelpBtn() {
         click(needHelpBtn);
     }
 
-    public String getPopUpHeading() {
-        return popupHeading.getText();
+    public String getNeedHelpPopUpHeading() {
+        return needHelpPopupHeading.getText();
     }
 
     public void closePopup() {
-        click(closePopupBtn);
+        click(needHelpClosePopupBtn);
     }
-    
-    public void clickMemberLogin () {
+
+    //language
+    public void openLanguageDropdown(){
+        click(languageDropdown);
+    }
+
+    public void selectLanguage(String expectedLanguage){
+        for(WebElement lang : allLanguages){
+            if(lang.getText().trim().equalsIgnoreCase(expectedLanguage)){
+                lang.click();
+                break;
+            }
+        }
+    }
+
+    public String getHeading(){
+        return pageHeading.getText().trim();
+    }
+
+    public void selectLanguageByCode(String code) throws InterruptedException {
+        languageDropdown.click();
+        Thread.sleep(1000);
+
+        String xpath = String.format("//li[.//img[@alt='%s']]", code);
+        driver.findElement(By.xpath(xpath)).click();
+
+        Thread.sleep(1500);  // allow heading to update
+    }
+
+    public void clickMemberLoginLink() {
         click(memberLoginLink);
     }
 
     public boolean isEmailAddressInputDisplayed() {
         return emailInput.isDisplayed();
     }
-
-    //Language
-
-
-
 }

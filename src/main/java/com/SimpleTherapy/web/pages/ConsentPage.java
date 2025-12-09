@@ -1,4 +1,4 @@
-package com.SimpleTherapy.web.pages;
+package com.simpleTherapy.web.pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,7 +23,6 @@ public class ConsentPage extends BaseClass {
 
     // Constructor
     public ConsentPage() {
-
         PageFactory.initElements(driver, this);
     }
 
@@ -32,16 +31,32 @@ public class ConsentPage extends BaseClass {
         return consentHeading.getText();
     }
 
+    public boolean isFirstCheckBoxSelected() {
+        return firstCheckBox.isSelected();
+    }
+
     public void clickFirstCheckBox() {
         click(firstCheckBox);
+    }
+
+    public boolean isSecondCheckBoxSelected() {
+        return secondCheckBox.isSelected();
     }
 
     public void clickSecondCheckBox() {
         click(secondCheckBox);
     }
 
+    public boolean isThirdCheckBoxSelected() {
+        return thirdCheckBox.isSelected();
+    }
+
     public void clickThirdCheckBox() {
         click(thirdCheckBox);
+    }
+
+    public boolean isAcceptAllBtnEnabled() {
+        return acceptAllBtn.isEnabled();
     }
 
     public void clickAcceptAllBtn() {

@@ -1,5 +1,4 @@
-package com.SimpleTherapy.web.utils;
-
+package com.simpleTherapy.web.utils;
 
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -19,8 +18,6 @@ public class ExcelReader {
     private XSSFCell cell = null;
 
 // private String data;
-
-
     public ExcelReader(String path) {
 
         this.path = path;

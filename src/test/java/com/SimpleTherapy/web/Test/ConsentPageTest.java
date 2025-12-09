@@ -1,13 +1,12 @@
-package com.SimpleTherapy.web.Test;
+package com.simpleTherapy.web.Test;
 
-import com.SimpleTherapy.web.pages.*;
-import com.SimpleTherapy.web.utils.ExcelReader;
+import com.simpleTherapy.web.pages.*;
+import com.aventstack.extentreports.Status;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class ConsentPageTest extends BaseClass {
-    ExcelReader reader;
     LandingPage landingPage;
     ConsentPage consentPage;
     CustomerConfiguration customerConfig;
@@ -15,36 +14,56 @@ public class ConsentPageTest extends BaseClass {
     @BeforeMethod
     public void setUp() throws Exception {
         initialization();
-        reader = new ExcelReader(Constants.SimpleTherapy_TestData);
-        customerConfig = new CustomerConfiguration("ConsentPage_Data");
+        customerConfig = new CustomerConfiguration("Dev2");
         landingPage = new LandingPage();
         consentPage = new ConsentPage();
     }
 
-    @Test(description = "Consent Page Validation")
-    public void VerifyConsentPage() throws Exception {
-        System.out.println("=== Starting Consent Page Validation Test ===");
-        String employer = customerConfig.getEmployerNameFromExcel();
-        landingPage.selectEmployer(employer);
-        scrollToElement(landingPage.getContinueButton());
-        Assert.assertTrue(landingPage.isContinueButtonEnabled(), "Continue not enabled");
-        landingPage.clickContinueButton();
+    @Test(description = "Landing Page Flow")
+    public void verifyLandingPageTest() throws Exception {
+        addLog(Status.INFO, "---- Landing Page Flow Started ----");
+        landingPage.selectEmployer(customerConfig.getEmployerNameFromExcel());
+        landingPage.clickContinueBtn();
+        addLog(Status.PASS, "Landing Page flow completed");
+    }
 
-        // Consent Page checks
-        String actualHeading = consentPage.getConsentHeading();
-        String expectedHeading = customerConfig.getConsentHeadingFromExcel();
-        System.out.println("Verifying Consent Page heading: " + actualHeading);
-        Assert.assertEquals(actualHeading, expectedHeading, "Consent heading mismatch");
+    @Test(description = "Consent Page Validation", dependsOnMethods = "verifyLandingPageTest")
+    public void verifyConsentPageTest() throws Exception {
+        addLog(Status.INFO, "-- Starting Consent Page Validation --");
+        // 1. Validate heading
+        addLog(Status.INFO, "Validating Consent heading");
+        Assert.assertEquals(consentPage.getConsentHeading(), customerConfig.getConsentHeadingFromExcel(), "Consent page heading mismatch");
+        addLog(Status.PASS, "Consent heading is correct");
 
-        System.out.println("Selecting Consent Checkboxes...");
+        // 2. First Checkbox
+        addLog(Status.INFO, "Validating First Checkbox default state");
+        Assert.assertFalse(consentPage.isFirstCheckBoxSelected(), "First checkbox should be unchecked");
+        addLog(Status.INFO, "Clicking First Checkbox");
         consentPage.clickFirstCheckBox();
-        consentPage.clickSecondCheckBox();
-        consentPage.clickThirdCheckBox();
-        System.out.println("All checkboxes selected successfully.");
+        Assert.assertTrue(consentPage.isFirstCheckBoxSelected(), "First checkbox should be checked");
+        addLog(Status.PASS, "First checkbox validated successfully");
 
-        System.out.println("Clicking Accept All button...");
+        // 3. Second Checkbox
+        addLog(Status.INFO, "Validating Second Checkbox default state");
+        Assert.assertFalse(consentPage.isSecondCheckBoxSelected(), "Second checkbox should be unchecked");
+        addLog(Status.INFO, "Clicking Second Checkbox");
+        consentPage.clickSecondCheckBox();
+        Assert.assertTrue(consentPage.isSecondCheckBoxSelected(), "Second checkbox should be checked");
+        addLog(Status.PASS, "Second checkbox validated successfully");
+
+        // 4. Third Checkbox
+        addLog(Status.INFO, "Validating Third Checkbox default state");
+        Assert.assertFalse(consentPage.isThirdCheckBoxSelected(), "Third checkbox should be unchecked");
+        addLog(Status.INFO, "Clicking Third Checkbox");
+        consentPage.clickThirdCheckBox();
+        Assert.assertTrue(consentPage.isThirdCheckBoxSelected(), "Third checkbox should be checked");
+        addLog(Status.PASS, "Third checkbox validated successfully");
+
+        // 5. Accept Button
+        addLog(Status.INFO, "Validating Accept button is enabled");
+        Assert.assertTrue(consentPage.isAcceptAllBtnEnabled(), "Accept button should be enabled");
+        addLog(Status.INFO, "Clicking Accept button");
         consentPage.clickAcceptAllBtn();
-        System.out.println("Consent accepted successfully.");
-        System.out.println("=== Consent Page Validation Test Completed Successfully ===");
+        addLog(Status.PASS, "Consent page validation completed successfully");
     }
 }

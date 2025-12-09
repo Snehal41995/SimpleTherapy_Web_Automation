@@ -1,6 +1,8 @@
-package com.SimpleTherapy.web.pages;
+package com.simpleTherapy.web.pages;
 
-import com.SimpleTherapy.web.utils.ExtentReportListener;
+import com.simpleTherapy.web.utils.ExtentReportListener;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -141,12 +143,20 @@ public class BaseClass {
 
     // iframe
     public void switchToFrame(WebElement frame) {
-
         driver.switchTo().frame(frame);
     }
 
-    public void switchToDefaultContent() {
-
+    public void switchToDefault() {
         driver.switchTo().defaultContent();
     }
+
+    public void addLog(Status status, String message) {
+        ExtentTest test = ExtentReportListener.getTest();
+        if (test != null) {
+            test.log(status, message);
+        } else {
+            System.out.println("ExtentTest is not initialized: " + message);
+        }
+    }
+
 }

@@ -6,8 +6,8 @@
     </listeners>
     <test name="End-to-End Flow Tests">
         <classes>
-            <class name="com.SimpleTherapy.web.Test.LandingPageTest"/>
-            <class name="com.SimpleTherapy.web.Test.ConsentPageTest"></class>
+            <class name="Test.com.simpleTherapy.web.LandingPageTest"/>
+            <class name="Test.com.simpleTherapy.web.ConsentPageTest"></class>
         </classes>
     </test>
 </suite>

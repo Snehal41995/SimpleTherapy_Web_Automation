@@ -1,13 +1,12 @@
-package com.SimpleTherapy.web.Test;
+package com.simpleTherapy.web.Test;
 
-import com.SimpleTherapy.web.pages.*;
-import com.SimpleTherapy.web.utils.ExcelReader;
+import com.simpleTherapy.web.pages.*;
+import com.aventstack.extentreports.Status;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class GreatNewsPageTest extends BaseClass {
-    ExcelReader reader;
     LandingPage landingPage;
     ConsentPage consentPage;
     GreatNewsPage greatNewsPage;
@@ -16,38 +15,38 @@ public class GreatNewsPageTest extends BaseClass {
     @BeforeMethod
     public void setUp() throws Exception {
         initialization();
-        reader = new ExcelReader(Constants.SimpleTherapy_TestData);
-        customerConfig = new CustomerConfiguration("GreatNewsPage_Data");
+        customerConfig = new CustomerConfiguration("Dev2");
         landingPage = new LandingPage();
         consentPage = new ConsentPage();
         greatNewsPage = new GreatNewsPage();
     }
 
-    @Test(description = "Great News Page Validation")
-    public void VerifyGreatNewsPage() throws Exception {
-        System.out.println("=== Starting Great News Page Validation Test ===");
-        String employer = customerConfig.getEmployerNameFromExcel();
-        landingPage.selectEmployer(employer);
-        scrollToElement(landingPage.getContinueButton());
-        Assert.assertTrue(landingPage.isContinueButtonEnabled(), "Continue not enabled");
-        landingPage.clickContinueButton();
+    @Test(description = "Landing Page Flow")
+    public void verifyLandingPageTest() throws Exception {
+        addLog(Status.INFO, "---- Landing Page Flow Started ----");
+        landingPage.selectEmployer(customerConfig.getEmployerNameFromExcel());
+        landingPage.clickContinueBtn();
+        addLog(Status.PASS, "Landing Page flow completed");
+    }
 
+    @Test(description = "Consent Page Flow", dependsOnMethods = "verifyLandingPageTest")
+    public void verifyConsentPageTest() throws Exception {
+        addLog(Status.INFO, "---- Consent Page Flow Started ----");
         consentPage.clickFirstCheckBox();
         consentPage.clickSecondCheckBox();
         consentPage.clickThirdCheckBox();
         consentPage.clickAcceptAllBtn();
+        addLog(Status.PASS, "Consent Page flow completed");
+    }
 
-        // Great News Page checks
-        String actualHeading = greatNewsPage.getGreatNewsHeading();
-        String expectedHeading = customerConfig.getGreatNewsHeadingFromExcel();
-        System.out.println("Verifying Great News Page heading: " + actualHeading);
-        Assert.assertEquals(actualHeading, expectedHeading, "Great News Page Heading mismatch");
-
-        greatNewsPage.openHearAboutUsDropdown();
-        Thread.sleep(3000);
+    @Test(description = "Great News Page Validation", dependsOnMethods = "verifyConsentPageTest")
+    public void verifyGreatNewsPageTest() throws Exception {
+        addLog(Status.INFO, "---- Great News Page Validation Started ----");
+        Assert.assertEquals(greatNewsPage.getGreatNewsHeading(), customerConfig.getGreatNewsHeadingFromExcel(), "Great News Page heading mismatch!");
+        addLog(Status.PASS, "Great News Page heading validated");
+        greatNewsPage.clickHearAboutUsDropdown();
         greatNewsPage.selectDemoOption();
-        Thread.sleep(3000);
         greatNewsPage.clickContinueBtn();
-        System.out.println("=== Great News Page Validation Test Completed Successfully ===");
+        addLog(Status.PASS, "Great News Page flow completed successfully");
     }
 }

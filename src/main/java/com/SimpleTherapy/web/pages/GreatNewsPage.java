@@ -1,4 +1,4 @@
-package com.SimpleTherapy.web.pages;
+package com.simpleTherapy.web.pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -20,16 +20,14 @@ public class GreatNewsPage extends BaseClass {
 
     // Constructor
     public GreatNewsPage() {
-
         PageFactory.initElements(driver, this);
     }
 
     public String getGreatNewsHeading() {
-
         return greatNewsHeading.getText();
     }
 
-    public void openHearAboutUsDropdown() {
+    public void clickHearAboutUsDropdown() {
         click(hearAboutUsDropdown);
     }
 

@@ -1,4 +1,5 @@
-package com.SimpleTherapy.web.utils;
+package com.simpleTherapy.web.utils;
+
 import org.testng.IAnnotationTransformer;
 import org.testng.annotations.ITestAnnotation;
 import java.lang.reflect.Constructor;
