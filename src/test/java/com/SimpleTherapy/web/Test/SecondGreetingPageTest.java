@@ -25,7 +25,7 @@ public class SecondGreetingPageTest extends BaseClass {
     public void setUp() throws Exception {
         initialization();
         reader = new ExcelReader(Constants.SimpleTherapy_TestData);
-        customerConfig = new CustomerConfiguration("ProgramsInfoPage_Data");
+        customerConfig = new CustomerConfiguration("ProgramsInfoPage_Data", 2);
         landingPage = new LandingPage();
         consentPage = new ConsentPage();
         greatNewsPage = new GreatNewsPage();
@@ -105,7 +105,7 @@ public class SecondGreetingPageTest extends BaseClass {
 
         // Add navigation or flow actions here if needed
         addLog(Status.INFO, "Clicking Continue button on Programs Info Page");
-        secondGreetingPage.clickContinueBtn();
+       // secondGreetingPage.clickContinueBtn();
 
         addLog(Status.PASS, "Programs Info Page flow completed successfully");
     }

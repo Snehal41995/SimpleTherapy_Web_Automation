@@ -13,7 +13,7 @@ public class FirstGreetingPage extends BaseClass {
     WebElement step3Image;
 
     @FindBy(xpath = "//span[contains(text(), 'Continue')]")
-    WebElement continueBtn;
+    WebElement firstContinueBtn;
 
     // Constructor
     public FirstGreetingPage() {
@@ -29,6 +29,6 @@ public class FirstGreetingPage extends BaseClass {
     }
 
     public void clickContinueBtn() {
-        continueBtn.click();
+        click(firstContinueBtn);
     }
 }

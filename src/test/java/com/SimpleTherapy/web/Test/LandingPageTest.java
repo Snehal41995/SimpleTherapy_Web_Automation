@@ -7,14 +7,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class LandingPageTest extends BaseClass {
-
     LandingPage landingPage;
     CustomerConfiguration customerConfig;
 
     @BeforeMethod
     public void setUp() throws Exception {
         initialization();
-        customerConfig = new CustomerConfiguration("Dev2");
+        customerConfig = new CustomerConfiguration("Dev2", 2);
         landingPage = new LandingPage();
     }
 
@@ -49,7 +48,6 @@ public class LandingPageTest extends BaseClass {
         landingPage.clickLoginHereLink();
         Thread.sleep(5000);
         driver.navigate().back();
-        scrollUp(800);
         Thread.sleep(2000);
         addLog(Status.PASS, "Navigated back from Login page");
 

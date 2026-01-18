@@ -15,7 +15,7 @@ public class GreatNewsPageTest extends BaseClass {
     @BeforeMethod
     public void setUp() throws Exception {
         initialization();
-        customerConfig = new CustomerConfiguration("Dev2");
+        customerConfig = new CustomerConfiguration("Dev2", 2);
         landingPage = new LandingPage();
         consentPage = new ConsentPage();
         greatNewsPage = new GreatNewsPage();

@@ -1,14 +1,15 @@
 package com.simpleTherapy.web.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.io.IOException;
 import java.util.List;
 
 public class LandingPage extends BaseClass {
-    // ======================= Page Elements =======================
     @FindBy(xpath = "//h1[text()='Welcome to SimpleTherapy']")
     WebElement titleHeading;
 
@@ -60,12 +61,10 @@ public class LandingPage extends BaseClass {
     @FindBy(name = "username")
     WebElement emailInput;
 
-    // Constructor
     public LandingPage() {
         PageFactory.initElements(driver, this);
     }
 
-    // ======================= Page Actions =======================
     public String getTitleHeading() {
         return titleHeading.getText();
     }
@@ -136,12 +135,9 @@ public class LandingPage extends BaseClass {
 
     public void selectLanguageByCode(String code) throws InterruptedException {
         languageDropdown.click();
-        Thread.sleep(1000);
 
         String xpath = String.format("//li[.//img[@alt='%s']]", code);
         driver.findElement(By.xpath(xpath)).click();
-
-        Thread.sleep(1500);  // allow heading to update
     }
 
     public void clickMemberLoginLink() {

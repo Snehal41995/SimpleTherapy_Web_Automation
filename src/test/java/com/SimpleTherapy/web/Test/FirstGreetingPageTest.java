@@ -20,7 +20,7 @@ public class FirstGreetingPageTest extends BaseClass {
     public void setUp() throws Exception {
         initialization();
         reader = new ExcelReader(Constants.SimpleTherapy_TestData);
-        customerConfig = new CustomerConfiguration("GreetingPage_Data");
+        customerConfig = new CustomerConfiguration("GreetingPage_Data", 2);
         landingPage = new LandingPage();
         consentPage = new ConsentPage();
         greatNewsPage = new GreatNewsPage();
