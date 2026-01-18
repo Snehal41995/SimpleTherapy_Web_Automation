@@ -1,9 +1,17 @@
 package com.simpleTherapy.web.pages;
 
+import com.simpleTherapy.web.utils.DateUtil;
 import com.simpleTherapy.web.utils.PhoneUtil;
+import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class ProfileDetailsPage extends BaseClass {
     @FindBy(xpath = "//input[@name='firstname']")
@@ -21,25 +29,22 @@ public class ProfileDetailsPage extends BaseClass {
     @FindBy(xpath = "//input[@name='phone_number']")
     WebElement phoneInput;
 
-    @FindBy(xpath = "//label[text()='Date of birth']/parent::div//input")
-    WebElement dob;
-
     @FindBy(xpath = "//input[@name = 'address1']")
     WebElement address1;
 
-    @FindBy(xpath = "//label[text()='Country']/parent::div//input")
+    @FindBy(xpath = "//div[normalize-space()='United States']")
     WebElement country;
 
     @FindBy(xpath = "//input[@name = 'city']")
     WebElement city;
 
-    @FindBy(xpath = "//label[text()='State']/parent::div//input")
+    @FindBy(xpath = "//div[contains(@class,'singleValue') and normalize-space()='California']")
     WebElement state;
 
-    @FindBy(xpath = "//input[@name = 'zip_code']")
-    WebElement zipCode;
+    @FindBy(xpath = "//input[@placeholder='Minor date of birth']")
+    WebElement dob;
 
-    @FindBy(xpath = "//button[.='Save']")
+    @FindBy(xpath = "//button[.//span[text()='Save Changes']]")
     private WebElement saveBtn;
 
     public ProfileDetailsPage() {
@@ -64,15 +69,11 @@ public class ProfileDetailsPage extends BaseClass {
     }
 
     public String getEmail() {
-        return getValue(email).trim();
+        return getValue(email);
     }
 
     public String getNormalizedPhoneNumber() {
         return PhoneUtil.normalize(phoneInput.getAttribute("value"));
-    }
-
-    public String getDob() {
-        return getValue(dob);
     }
 
     public String getAddress1() {
@@ -80,7 +81,8 @@ public class ProfileDetailsPage extends BaseClass {
     }
 
     public String getCountry() {
-        return getValue(country);
+        scrollToElement(country);
+        return country.getText().trim();
     }
 
     public String getCity() {
@@ -88,11 +90,14 @@ public class ProfileDetailsPage extends BaseClass {
     }
 
     public String getState() {
-        return getValue(state);
+        scrollToElement(state);
+        return state.getText().trim();
     }
 
-    public String getZipCode() {
-        return getValue(zipCode);
+
+    public String getDobNormalized() {
+        scrollToElement(dob);
+        return DateUtil.normalizeDate(getValue(dob));
     }
 
     public void editFirstName(String value) {
@@ -104,4 +109,33 @@ public class ProfileDetailsPage extends BaseClass {
         lastName.clear();
         lastName.sendKeys(value);
     }
+
+    public void editCity(String value) {
+        city.clear();
+        city.sendKeys(value);
+    }
+
+    public void clickSave() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+        // 1️⃣ Wait for button to be present
+        WebElement saveButton = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//button[normalize-space()='Save Changes']") // trims spaces
+        ));
+
+        // 2️⃣ Scroll into view
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", saveBtn);
+
+        // 3️⃣ Wait until clickable using JS check (avoids overlay issues)
+        wait.until(driver -> ((JavascriptExecutor) driver)
+                .executeScript(
+                        "var btn = arguments[0]; return btn.offsetWidth > 0 && btn.offsetHeight > 0 && !btn.disabled;",
+                        saveButton
+                ).equals(Boolean.TRUE)
+        );
+
+        // 4️⃣ Click using JS to avoid Selenium intercepted click
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", saveBtn);
+    }
 }
+

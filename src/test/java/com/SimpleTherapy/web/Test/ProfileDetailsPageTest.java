@@ -76,6 +76,7 @@ public class ProfileDetailsPageTest extends BaseClass {
         Assert.assertTrue(dashboardPage.isProfileIconDisplayed(), "Profile icon missing");
 
         dashboardPage.clickProfileIcon();
+
         // ---- NAVIGATE TO PROFILE DETAILS ----
         addLog(Status.INFO, "Navigating to Profile Details page");
         dashboardPage.clickProfileDetailsOption();
@@ -92,11 +93,11 @@ public class ProfileDetailsPageTest extends BaseClass {
         String expLastName = excel.getCellData("OTP_Data", "LastName", 2).trim();
         String expEmail = excel.getCellData("OTP_Data", "Email", 2).trim();
         //String expPhone = excel.getCellData("OTP_Data", "Phone", 2).replaceAll("[^0-9]", "");
-        String expDob = excel.getCellData("OTP_Data", "DOB", 2).trim();
         String expAddress1 = excel.getCellData("OTP_Data", "Address1", 2).trim();
         String expCountry = excel.getCellData("OTP_Data", "Country", 2).trim();
         String expCity = excel.getCellData("OTP_Data", "City", 2).trim();
         String expState = excel.getCellData("OTP_Data", "State", 2).trim();
+        String expDob = excel.getCellData("OTP_Data", "DOB", 2).trim();
 
         // ===== PROFILE DETAILS VALIDATION =====
 
@@ -121,11 +122,6 @@ public class ProfileDetailsPageTest extends BaseClass {
         Assert.assertEquals(actualPhone, expPhone, "Phone number mismatch");
         addLog(Status.PASS, "Phone number validated successfully");
 
-        addLog(Status.INFO, "Validating Date of Birth");
-        Assert.assertEquals(profileDetailsPage.getDob(), expDob,
-                "DOB mismatch");
-        addLog(Status.PASS, "DOB validated successfully");
-
         addLog(Status.INFO, "Validating Address");
         Assert.assertEquals(profileDetailsPage.getAddress1(), expAddress1,
                 "Address mismatch");
@@ -145,6 +141,10 @@ public class ProfileDetailsPageTest extends BaseClass {
         Assert.assertEquals(profileDetailsPage.getState(), expState,
                 "State mismatch");
         addLog(Status.PASS, "State validated successfully");
+
+        addLog(Status.INFO, "Validating Date of Birth");
+        Assert.assertEquals(profileDetailsPage.getDobNormalized(), expDob, "DOB mismatch");
+        addLog(Status.PASS, "DOB validated successfully");
 
         addLog(Status.PASS, "All profile details validated successfully");
     }
