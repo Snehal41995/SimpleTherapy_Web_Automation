@@ -61,6 +61,11 @@ public class EditProfileDetailsPageTest extends BaseClass {
         String updFirstName = excel.getCellData("OTP_Data", "FirstName_Updated", 2);
         String updLastName  = excel.getCellData("OTP_Data", "LastName_Updated", 2);
         String updCity      = excel.getCellData("OTP_Data", "City_Updated", 2);
+        String updHeight = excel.getCellData("OTP_Data", "Height_Updated", 2);
+        String updWeight = excel.getCellData("OTP_Data", "Weight_Updated", 2);
+
+        profileDetailsPage.selectHeight(updHeight);
+        profileDetailsPage.selectWeight(updWeight);
 
         // ===== EDIT =====
         addLog(Status.INFO, "Editing profile details");

@@ -41,6 +41,12 @@ public class ProfileDetailsPage extends BaseClass {
     @FindBy(xpath = "//div[contains(@class,'singleValue') and normalize-space()='California']")
     WebElement state;
 
+    @FindBy(xpath = "//input[@name='height']/preceding-sibling::div[contains(@class,'control')]")
+    private WebElement heightDropdown;
+
+    @FindBy(xpath = "//input[@name='weight']/preceding-sibling::div[contains(@class,'control')]")
+    private WebElement weightDropdown;
+
     @FindBy(xpath = "//input[@placeholder='Minor date of birth']")
     WebElement dob;
 
@@ -94,48 +100,68 @@ public class ProfileDetailsPage extends BaseClass {
         return state.getText().trim();
     }
 
-
     public String getDobNormalized() {
         scrollToElement(dob);
         return DateUtil.normalizeDate(getValue(dob));
     }
 
+    public void selectHeight(String heightValue) {
+        click(heightDropdown);
+        click(heightDropdown);
+    }
+
+    public void selectWeight(String weightValue) {
+        click(weightDropdown);
+        click(weightDropdown);
+    }
+
+
+
     public void editFirstName(String value) {
         firstName.clear();
         firstName.sendKeys(value);
+        firstName.sendKeys("\t");
     }
 
     public void editLastName(String value) {
         lastName.clear();
         lastName.sendKeys(value);
+        lastName.sendKeys("\t");
     }
 
     public void editCity(String value) {
         city.clear();
         city.sendKeys(value);
+        city.sendKeys("\t"); // triggers blur → enables Save
     }
+
+    public void editAddress(String value) {
+        address1.clear();
+        address1.sendKeys(value);
+        address1.sendKeys("\t");
+    }
+
+    public void editPhone(String value) {
+        phoneInput.clear();
+        phoneInput.sendKeys(value);
+        phoneInput.sendKeys("\t");
+    }
+
 
     public void clickSave() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-        // 1️⃣ Wait for button to be present
-        WebElement saveButton = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//button[normalize-space()='Save Changes']") // trims spaces
-        ));
+            scrollToElement(saveBtn);
 
-        // 2️⃣ Scroll into view
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", saveBtn);
+            // wait until button is enabled (React-safe)
+            wait.until(driver -> saveBtn.isDisplayed() && saveBtn.isEnabled());
 
-        // 3️⃣ Wait until clickable using JS check (avoids overlay issues)
-        wait.until(driver -> ((JavascriptExecutor) driver)
-                .executeScript(
-                        "var btn = arguments[0]; return btn.offsetWidth > 0 && btn.offsetHeight > 0 && !btn.disabled;",
-                        saveButton
-                ).equals(Boolean.TRUE)
-        );
-
-        // 4️⃣ Click using JS to avoid Selenium intercepted click
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", saveBtn);
+            try {
+                saveBtn.click();
+            } catch (ElementClickInterceptedException e) {
+                ((JavascriptExecutor) driver)
+                        .executeScript("arguments[0].click();", saveBtn);
+            }
     }
 }
 

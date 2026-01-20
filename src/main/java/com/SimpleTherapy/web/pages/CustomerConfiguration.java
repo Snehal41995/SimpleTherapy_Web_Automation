@@ -162,6 +162,14 @@ public class CustomerConfiguration extends BaseClass {
         return reader.getCellData(sheetName1, "ProfileDetailsHeading", 2);
     }
 
+    public String getSelectedHeightFromExcel() {
+        return reader.getCellData(sheetName1, "updHeight", 2);
+    }
+
+    public String getSelectedWeightFromExcel() {
+        return reader.getCellData(sheetName1, "updWeight", 2);
+    }
+
 
 }
 
