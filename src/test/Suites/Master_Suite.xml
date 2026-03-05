@@ -2,12 +2,15 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="SimpleTherapy Automation Suite" verbose="1" parallel="false">
     <listeners>
-        <listener class-name="com.SimpleTherapy.web.utils.ExtentReportListener"/>
+        <listener class-name="com.simpleTherapy.web.utils.ExtentReportListener"/>
     </listeners>
     <test name="End-to-End Flow Tests">
         <classes>
-            <class name="Test.com.simpleTherapy.web.LandingPageTest"/>
-            <class name="Test.com.simpleTherapy.web.ConsentPageTest"></class>
+            <class name="com.simpleTherapy.web.Test.LandingPageTest"/>
+            <class name="com.simpleTherapy.web.Test.RegistrationFlowTest"/>
+            <class name="com.simpleTherapy.web.Test.ProfileDetailsPageTest"/>
+            <class name="com.simpleTherapy.web.Test.ProfilePictureTest"/>
+            <class name="com.simpleTherapy.web.Test.AboutPageTest"/>
         </classes>
     </test>
 </suite>

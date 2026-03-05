@@ -8,10 +8,10 @@ public class DashboardPage extends BaseClass {
     @FindBy(xpath = "//div[@data-role='Sara Card']//h2")
     WebElement saraCardGreeting;
 
-    @FindBy(xpath = "//button[contains(@id,'headlessui-menu-button')]")
+    @FindBy(xpath = "//button[@aria-label='User Menu']")
     WebElement profileIcon;
 
-    @FindBy(xpath = "//a[contains(@href,'/dashboard/profile/details')]")
+    @FindBy(xpath = "//a[@href='/dashboard/profile/details']//span[text()='Profile Details']")
     WebElement profileDetailsOption;
 
     public DashboardPage() {

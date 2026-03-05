@@ -163,11 +163,11 @@ public class CustomerConfiguration extends BaseClass {
     }
 
     public String getSelectedHeightFromExcel() {
-        return reader.getCellData(sheetName1, "updHeight", 2);
+        return reader.getCellData(sheetName1, "Height_Updated", rowNumber);
     }
 
     public String getSelectedWeightFromExcel() {
-        return reader.getCellData(sheetName1, "updWeight", 2);
+        return reader.getCellData(sheetName1, "Weight_Updated", rowNumber);
     }
 
 

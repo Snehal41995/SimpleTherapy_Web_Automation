@@ -18,80 +18,74 @@ public class LandingPageTest extends BaseClass {
     }
 
     @Test(description = "Full Landing Page Validation")
-    public void verifyLandingPageTest() throws Exception {
-        addLog(Status.INFO, "-- Starting Landing Page Validation Test --");
-        // 1. Verify Title
-        Assert.assertEquals(landingPage.getTitleHeading(), customerConfig.getTitleHeadingFromExcel(), "Title mismatch");
-        addLog(Status.PASS, "Landing page title verified successfully");
+    public void verifyLandingPageTest() throws InterruptedException {
 
-        // 2. Select Employer
-        addLog(Status.INFO, "Scrolling down to select employer");
+        addLog(Status.INFO, "=== Starting Landing Page Validation Test ===");
+
+        /* 1. Title Validation */
+        Assert.assertEquals(landingPage.getTitleHeading(), customerConfig.getTitleHeadingFromExcel(),
+                "Landing page title mismatch");
+        addLog(Status.PASS, "Landing page title verified");
+
+        /* 2. Employer Selection */
         scrollDown(800);
         addLog(Status.INFO, "Selecting employer: " + customerConfig.getEmployerNameFromExcel());
         landingPage.selectEmployer(customerConfig.getEmployerNameFromExcel());
-        Thread.sleep(5000);
-        Assert.assertTrue(landingPage.isContinueBtnEnabled(), "Continue button not enabled");
-        addLog(Status.PASS, "Continue button enabled successfully");
+        Assert.assertTrue(landingPage.isContinueBtnEnabled(),
+                "Continue button not enabled after employer selection");
+        addLog(Status.PASS, "Employer selected and Continue button enabled");
 
-        // 3. Intercom Support
-        addLog(Status.INFO, "Opening Intercom Help popup");
+        /* 3. Intercom Support */
         landingPage.clickHereForHelpLink();
-        Thread.sleep(5000);
-        Assert.assertEquals(landingPage.getChatBotHeading(), customerConfig.getChatBotHeadingFromExcel(), "ChatBot heading incorrect");
-        Thread.sleep(2000);
+        Assert.assertEquals(landingPage.getChatBotHeading(), customerConfig.getChatBotHeadingFromExcel(),
+                "ChatBot heading mismatch");
         landingPage.closeChatBot();
-        driver.switchTo().defaultContent();
-        addLog(Status.PASS, "Intercom ChatBot closed successfully");
+        addLog(Status.PASS, "Intercom ChatBot validated and closed");
 
-        // 4. Login Here button
-        addLog(Status.INFO, "Clicking 'Login Here' button");
+        /* 4. Login Here Navigation */
         landingPage.clickLoginHereLink();
-        Thread.sleep(5000);
+        Assert.assertTrue(landingPage.isEmailAddressInputDisplayed(),
+                "Login page did not load after clicking Login Here");
         driver.navigate().back();
-        Thread.sleep(2000);
-        addLog(Status.PASS, "Navigated back from Login page");
+        addLog(Status.PASS, "'Login Here' navigation verified");
 
-        // 5. Language Testing
-        addLog(Status.INFO, "Language Testing placeholder");
+        /* 5. Language Validation */
         String[][] languages = {
                 {"pl", "Witamy w SimpleTherapy"},
                 {"it", "Benvenuto su SimpleTherapy"}
         };
 
         for (String[] data : languages) {
-
             String code = data[0];
             String expectedHeading = data[1];
 
+            addLog(Status.INFO, "Validating language: " + code);
             landingPage.selectLanguageByCode(code);
 
             Thread.sleep(3000);
-
-            String actualHeading = landingPage.getHeading();
-            System.out.println("Selected: " + code + " | Heading: " + actualHeading);
-
-            Assert.assertEquals(actualHeading, expectedHeading,
-                    "Heading translation mismatch for: " + code);
+            Assert.assertEquals(landingPage.getHeading(), expectedHeading,
+                    "Heading translation mismatch for language: " + code);
+            addLog(Status.PASS, "Language '" + code + "' verified successfully");
         }
 
         addLog(Status.INFO, "Switching language back to English");
         landingPage.selectLanguageByCode("en");
-        Thread.sleep(2000);
 
-        // 6. Need Help Popup
-        addLog(Status.INFO, "Opening Need Help popup");
+        /* 6. Need Help Popup */
         landingPage.clickNeedHelpBtn();
-        Thread.sleep(5000);
-        Assert.assertEquals(landingPage.getNeedHelpPopUpHeading(), customerConfig.getPopupHeadingFromExcel(), "Need Help popup heading mismatch");
+
+        Assert.assertEquals(landingPage.getNeedHelpPopUpHeading(), customerConfig.getPopupHeadingFromExcel(),
+                "Need Help popup heading mismatch");
         landingPage.closePopup();
         addLog(Status.PASS, "Need Help popup validated and closed");
 
-        // 7. Member Login Redirection
-        addLog(Status.INFO, "Clicking Member Login");
+        /* 7. Member Login */
         landingPage.clickMemberLoginLink();
-        Thread.sleep(3000);
-        Assert.assertTrue(landingPage.isEmailAddressInputDisplayed(), "Login page did not load");
-        addLog(Status.PASS, "Successfully redirected to Member Login Page");
+
+        Assert.assertTrue(landingPage.isEmailAddressInputDisplayed(),
+                "Member Login page did not load");
+        addLog(Status.PASS, "Member Login page loaded successfully");
+
         addLog(Status.INFO, "=== Landing Page Validation Test Completed Successfully ===");
     }
 }

@@ -1,9 +1,13 @@
 package com.simpleTherapy.web.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class LoginPage extends BaseClass {
 
@@ -24,10 +28,25 @@ public class LoginPage extends BaseClass {
         return emailInput.isDisplayed();
     }
 
+//    public void enterEmail(String email) {
+//        emailInput.clear();
+//        emailInput.sendKeys(email);
+//    }
+
     public void enterEmail(String email) {
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        WebElement emailInput = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//input[@name='username']")
+                )
+        );
+
         emailInput.clear();
         emailInput.sendKeys(email);
     }
+
 
     public void clickContinue() {
         continueBtn.click();

@@ -8,7 +8,7 @@ public class AccountSecurityPage extends BaseClass {
     @FindBy(xpath = "//h1[text()='Keep Your Account Safe']")
     WebElement accountSecurityHeading;
 
-    @FindBy(xpath = "//button[@value='otp::0']//span[contains(@class,'cf5b9a4d3')]")
+    @FindBy(xpath = "//button[.//span[normalize-space()='Google Authenticator or similar']]//span[last()]\n")
     WebElement googleAuthArrow;
 
     public AccountSecurityPage() {

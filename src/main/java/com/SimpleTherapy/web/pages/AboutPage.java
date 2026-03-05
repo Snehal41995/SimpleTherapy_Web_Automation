@@ -4,36 +4,49 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import java.util.Set;
-
 public class AboutPage extends BaseClass {
+
+    // About menu item (from profile dropdown)
+    @FindBy(xpath = "//a[@href='/dashboard/profile/about']")
+    WebElement aboutMenu;
+
+    // Privacy Policy link inside About page
+    @FindBy(xpath = "//a[contains(@href,'privacy-policy')]")
+    WebElement privacyPolicyLink;
+
+    // Privacy Policy page header
+    @FindBy(xpath = "//h1[contains(text(),'Privacy Policy')]")
+    WebElement privacyPolicyHeader;
 
     public AboutPage() {
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(xpath = "//div[text()='About']")
-    private WebElement aboutTab;
-
-    @FindBy(xpath = "//a[contains(text(),'Privacy Policy')]")
-    private WebElement privacyPolicyLink;
-
-    public void openAboutTab() {
-        aboutTab.click();
+    // Click About from profile menu
+    public void clickAboutMenu() {
+        click(aboutMenu);
     }
 
-    public void openPrivacyPolicy() {
-        privacyPolicyLink.click();
+    // Click Privacy Policy link
+    public void clickPrivacyPolicy() {
+        click(privacyPolicyLink);
     }
 
-    public boolean isPrivacyPolicyLoaded() {
-        Set<String> windows = driver.getWindowHandles();
-        for (String win : windows) {
-            driver.switchTo().window(win);
-            if (driver.getTitle().toLowerCase().contains("privacy")) {
-                return true;
+    // Verify Privacy Policy page loaded
+    public boolean isPrivacyPolicyPageDisplayed() {
+        switchToNewTab();
+        String currentUrl = driver.getCurrentUrl();
+        return currentUrl.contains("privacy-policy");
+    }
+
+    // Switch to newly opened tab
+    public void switchToNewTab() {
+        String currentWindow = driver.getWindowHandle();
+        for (String window : driver.getWindowHandles()) {
+            if (!window.equals(currentWindow)) {
+                driver.switchTo().window(window);
+                break;
             }
         }
-        return false;
     }
 }

@@ -1,15 +1,14 @@
 package com.simpleTherapy.web.pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import java.io.IOException;
 import java.util.List;
 
 public class LandingPage extends BaseClass {
+
     @FindBy(xpath = "//h1[text()='Welcome to SimpleTherapy']")
     WebElement titleHeading;
 
@@ -50,7 +49,7 @@ public class LandingPage extends BaseClass {
     WebElement languageDropdown;
 
     @FindBy(css = "ul li")
-    List<WebElement> allLanguages;
+    List<WebElement> allLanguages; //Stores multiple language options
 
     @FindBy(css = "h1")
     WebElement pageHeading;
@@ -65,86 +64,116 @@ public class LandingPage extends BaseClass {
         PageFactory.initElements(driver, this);
     }
 
+    /* ---------------- TITLE ---------------- */
+
     public String getTitleHeading() {
-        return titleHeading.getText();
+        waitForElementVisibility(titleHeading);
+        return titleHeading.getText().trim();
     }
 
+    /* ---------------- EMPLOYER ---------------- */
+
     public void selectEmployer(String employer) {
+        waitForElementVisibility(employerInput);
         sendKeys(employerInput, employer);
+        waitForClickable(employerDropdownOption);
         click(employerDropdownOption);
     }
 
     public boolean isContinueBtnEnabled() {
+        waitForClickable(continueBtn);
         return continueBtn.isEnabled();
     }
 
     public void clickContinueBtn() {
+        waitForClickable(continueBtn);
         click(continueBtn);
     }
 
+    /* ---------------- INTERCOM ---------------- */
+
     public void clickHereForHelpLink() {
+        waitForClickable(helpLink);
         click(helpLink);
     }
 
     public String getChatBotHeading() {
         switchToFrame(intercomFrame);
-        String text = chatBotHeading.getText();
+        waitForElementVisibility(chatBotHeading);
+        String text = chatBotHeading.getText().trim();
         switchToDefault();
         return text;
     }
 
     public void closeChatBot() {
         switchToFrame(intercomFrame);
+        waitForClickable(chatBotCloseBtn);
         click(chatBotCloseBtn);
         switchToDefault();
     }
 
+    /* ---------------- LOGIN ---------------- */
+
     public void clickLoginHereLink() {
+        waitForClickable(loginHereLink);
         click(loginHereLink);
     }
 
+    public void clickMemberLoginLink() {
+        waitForClickable(memberLoginLink);
+        click(memberLoginLink);
+    }
+
+    public boolean isEmailAddressInputDisplayed() {
+        waitForElementVisibility(emailInput);
+        return emailInput.isDisplayed();
+    }
+
+    /* ---------------- NEED HELP ---------------- */
+
     public void clickNeedHelpBtn() {
+        waitForClickable(needHelpBtn);
         click(needHelpBtn);
     }
 
     public String getNeedHelpPopUpHeading() {
-        return needHelpPopupHeading.getText();
+        waitForElementVisibility(needHelpPopupHeading);
+        return needHelpPopupHeading.getText().trim();
     }
 
     public void closePopup() {
+        waitForClickable(needHelpClosePopupBtn);
         click(needHelpClosePopupBtn);
     }
 
-    //language
-    public void openLanguageDropdown(){
+    /* ---------------- LANGUAGE ---------------- */
+
+    public void openLanguageDropdown() {
+        waitForClickable(languageDropdown);
         click(languageDropdown);
     }
 
-    public void selectLanguage(String expectedLanguage){
-        for(WebElement lang : allLanguages){
-            if(lang.getText().trim().equalsIgnoreCase(expectedLanguage)){
+    public void selectLanguage(String expectedLanguage) {
+        openLanguageDropdown();
+        for (WebElement lang : allLanguages) {
+            if (lang.getText().trim().equalsIgnoreCase(expectedLanguage)) {
+                waitForClickable(lang);
                 lang.click();
                 break;
             }
         }
     }
 
-    public String getHeading(){
-        return pageHeading.getText().trim();
-    }
-
-    public void selectLanguageByCode(String code) throws InterruptedException {
-        languageDropdown.click();
-
+    public void selectLanguageByCode(String code) {
+        openLanguageDropdown();
         String xpath = String.format("//li[.//img[@alt='%s']]", code);
-        driver.findElement(By.xpath(xpath)).click();
+        WebElement langOption = driver.findElement(By.xpath(xpath));
+        waitForClickable(langOption);
+        click(langOption);
     }
 
-    public void clickMemberLoginLink() {
-        click(memberLoginLink);
-    }
-
-    public boolean isEmailAddressInputDisplayed() {
-        return emailInput.isDisplayed();
+    public String getHeading() {
+        waitForElementVisibility(pageHeading);
+        return pageHeading.getText().trim();
     }
 }

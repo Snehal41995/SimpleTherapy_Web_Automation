@@ -2,56 +2,59 @@ package com.simpleTherapy.web.pages;
 
 import com.simpleTherapy.web.utils.DateUtil;
 import com.simpleTherapy.web.utils.PhoneUtil;
-import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
+import java.nio.file.Paths;
 
 public class ProfileDetailsPage extends BaseClass {
+
     @FindBy(xpath = "//input[@name='firstname']")
     WebElement firstName;
 
     @FindBy(xpath = "//input[@name='lastname']")
     WebElement lastName;
 
-    @FindBy(xpath = "//input[@name='preferredName']")
-    WebElement preferredName;
-
     @FindBy(xpath = "//input[@type='text' and @disabled and contains(@value,'@')]")
     WebElement email;
 
     @FindBy(xpath = "//input[@name='phone_number']")
-    WebElement phoneInput;
+    WebElement phone;
 
-    @FindBy(xpath = "//input[@name = 'address1']")
-    WebElement address1;
+    @FindBy(xpath = "//input[@name='address1']")
+    WebElement address;
 
     @FindBy(xpath = "//div[normalize-space()='United States']")
     WebElement country;
 
-    @FindBy(xpath = "//input[@name = 'city']")
+    @FindBy(xpath = "//input[@name='city']")
     WebElement city;
 
     @FindBy(xpath = "//div[contains(@class,'singleValue') and normalize-space()='California']")
     WebElement state;
 
-    @FindBy(xpath = "//input[@name='height']/preceding-sibling::div[contains(@class,'control')]")
-    private WebElement heightDropdown;
-
-    @FindBy(xpath = "//input[@name='weight']/preceding-sibling::div[contains(@class,'control')]")
-    private WebElement weightDropdown;
-
     @FindBy(xpath = "//input[@placeholder='Minor date of birth']")
     WebElement dob;
 
-    @FindBy(xpath = "//button[.//span[text()='Save Changes']]")
-    private WebElement saveBtn;
+    // Profile image
+    @FindBy(xpath = "//input[@type='file']")
+    WebElement uploadInput;
+
+    @FindBy(xpath = "//img[contains(@src,'data:image')]")
+    WebElement profileImage;
+
+    @FindBy(xpath = "//*[name()='svg' and contains(@class,'arrow-left')]")
+    WebElement backIcon;
+
+    @FindBy(xpath = "//button[@aria-label='User Menu']")
+    WebElement profileIcon;
+
+    @FindBy(xpath = "//span[normalize-space()='Logout']")
+    WebElement logoutBtn;
+
+    @FindBy(xpath = "//button[.//span[normalize-space()='Confirm']]")
+    WebElement confirmLogoutBtn;
 
     public ProfileDetailsPage() {
         PageFactory.initElements(driver, this);
@@ -70,20 +73,16 @@ public class ProfileDetailsPage extends BaseClass {
         return getValue(lastName);
     }
 
-    public String getPreferredName() {
-        return getValue(preferredName);
-    }
-
     public String getEmail() {
         return getValue(email);
     }
 
-    public String getNormalizedPhoneNumber() {
-        return PhoneUtil.normalize(phoneInput.getAttribute("value"));
+    public String getPhone() {
+        return PhoneUtil.normalize(phone.getAttribute("value"));
     }
 
-    public String getAddress1() {
-        return getValue(address1);
+    public String getAddress() {
+        return getValue(address);
     }
 
     public String getCountry() {
@@ -100,68 +99,41 @@ public class ProfileDetailsPage extends BaseClass {
         return state.getText().trim();
     }
 
-    public String getDobNormalized() {
-        scrollToElement(dob);
+    public String getDob() {
         return DateUtil.normalizeDate(getValue(dob));
     }
 
-    public void selectHeight(String heightValue) {
-        click(heightDropdown);
-        click(heightDropdown);
-    }
-
-    public void selectWeight(String weightValue) {
-        click(weightDropdown);
-        click(weightDropdown);
+    // Profile picture upload
+    public void uploadProfilePicture(String imagePath) {
+        String absolutePath = Paths.get(imagePath).toAbsolutePath().toString();
+        uploadInput.sendKeys(absolutePath);
     }
 
 
-
-    public void editFirstName(String value) {
-        firstName.clear();
-        firstName.sendKeys(value);
-        firstName.sendKeys("\t");
+    public boolean isProfileImageDisplayed() throws InterruptedException {
+        Thread.sleep(2000);
+        return profileImage.isDisplayed();
     }
 
-    public void editLastName(String value) {
-        lastName.clear();
-        lastName.sendKeys(value);
-        lastName.sendKeys("\t");
+    public String getProfileImageSrc() {
+        return profileImage.getAttribute("src");
     }
 
-    public void editCity(String value) {
-        city.clear();
-        city.sendKeys(value);
-        city.sendKeys("\t"); // triggers blur → enables Save
+    public void clickBackIcon() {
+        click(backIcon);
     }
 
-    public void editAddress(String value) {
-        address1.clear();
-        address1.sendKeys(value);
-        address1.sendKeys("\t");
+    public void clickProfileIcon() {
+        click(profileIcon);
     }
 
-    public void editPhone(String value) {
-        phoneInput.clear();
-        phoneInput.sendKeys(value);
-        phoneInput.sendKeys("\t");
+    public void clickLogoutBtn() {
+        click(logoutBtn);
     }
 
-
-    public void clickSave() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-
-            scrollToElement(saveBtn);
-
-            // wait until button is enabled (React-safe)
-            wait.until(driver -> saveBtn.isDisplayed() && saveBtn.isEnabled());
-
-            try {
-                saveBtn.click();
-            } catch (ElementClickInterceptedException e) {
-                ((JavascriptExecutor) driver)
-                        .executeScript("arguments[0].click();", saveBtn);
-            }
+    public void confirmLogoutBtn() {
+        click(confirmLogoutBtn);
     }
+
 }
 

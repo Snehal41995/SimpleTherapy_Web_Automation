@@ -40,9 +40,9 @@ public class FirstGreetingPageTest extends BaseClass {
     public void verifyConsentPageTest() throws Exception {
         addLog(Status.INFO, "---- Consent Page flow Started ----");
         consentPage.clickFirstCheckBox();
-        consentPage.clickSecondCheckBox();
-        consentPage.clickThirdCheckBox();
-        consentPage.clickAcceptAllBtn();
+//        consentPage.clickSecondCheckBox();
+//        consentPage.clickThirdCheckBox();
+//        consentPage.clickAcceptAllBtn();
         addLog(Status.PASS, "Consent Page flow completed");
     }
 

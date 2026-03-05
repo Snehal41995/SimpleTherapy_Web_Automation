@@ -82,7 +82,7 @@ public class BaseClass {
                       WAIT METHODS
     ------------------------------------------------------ */
 
-    public WebElement waitForVisibility(WebElement element) {
+    public WebElement waitForElementVisibility(WebElement element) {
         return wait.until(ExpectedConditions.visibilityOf(element));
     }
 
@@ -97,6 +97,12 @@ public class BaseClass {
                         .executeScript("return document.readyState").equals("complete")
         );
     }
+
+    public void waitForElementToBeClickable(WebElement element) {
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(element));
+    }
+
 
 
     /* ------------------------------------------------------
@@ -150,7 +156,7 @@ public class BaseClass {
     ------------------------------------------------------ */
 
     public void sendKeys(WebElement element, String text) {
-        WebElement el = waitForVisibility(element);
+        WebElement el = waitForElementVisibility(element);
         el.clear();
         el.sendKeys(text);
     }
@@ -176,7 +182,7 @@ public class BaseClass {
     ------------------------------------------------------ */
 
     public String getText(WebElement element) {
-        return waitForVisibility(element).getText().trim();
+        return waitForElementVisibility(element).getText().trim();
     }
 
 

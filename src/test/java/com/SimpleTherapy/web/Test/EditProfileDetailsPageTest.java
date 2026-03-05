@@ -4,6 +4,7 @@ import com.aventstack.extentreports.Status;
 import com.simpleTherapy.web.pages.*;
 import com.simpleTherapy.web.utils.AuthenticatorOtpUtil;
 import com.simpleTherapy.web.utils.ExcelReader;
+import com.simpleTherapy.web.utils.PhoneUtil;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -11,9 +12,10 @@ import org.testng.annotations.Test;
 public class EditProfileDetailsPageTest extends BaseClass {
 
     LandingPage landingPage;
-    SignupPasswordPage signupPasswordPage;
     LoginPage loginPage;
+    SignupPasswordPage signupPasswordPage;
     DashboardPage dashboardPage;
+    EditProfileDetailsPage editProfileDetailsPage;
     ProfileDetailsPage profileDetailsPage;
     ExcelReader excel;
     CustomerConfiguration customerConfig;
@@ -21,21 +23,23 @@ public class EditProfileDetailsPageTest extends BaseClass {
     @BeforeMethod
     public void setUp() throws Exception {
         initialization();
+
         customerConfig = new CustomerConfiguration("Dev2", 2);
 
         landingPage = new LandingPage();
-        signupPasswordPage = new SignupPasswordPage();
         loginPage = new LoginPage();
+        signupPasswordPage = new SignupPasswordPage();
         dashboardPage = new DashboardPage();
+        editProfileDetailsPage = new EditProfileDetailsPage();
         profileDetailsPage = new ProfileDetailsPage();
 
         excel = new ExcelReader(Constants.SimpleTherapy_TestData);
     }
 
-    @Test(description = "Edit and Validate Profile Details")
-    public void editAndValidateProfileDetails() throws Exception {
+    @Test(description = "Edit and validate My Profile details")
+    public void editAndValidateProfileDetails() {
 
-        // ===== LOGIN =====
+        /* ---------- LOGIN ---------- */
         landingPage.clickMemberLoginLink();
 
         String email = excel.getCellData("OTP_Data", "Email", 2);
@@ -47,42 +51,48 @@ public class EditProfileDetailsPageTest extends BaseClass {
         signupPasswordPage.enterPassword(customerConfig.getSignUpPasswordFromExcel());
         signupPasswordPage.clickContinueBtn();
 
-        String otp = AuthenticatorOtpUtil.generateOtp(secretKey);
-        loginPage.enterOtp(otp);
+        loginPage.enterOtp(AuthenticatorOtpUtil.generateOtp(secretKey));
         loginPage.clickContinue();
 
         Assert.assertTrue(dashboardPage.isDashboardDisplayed());
 
-        // ===== NAVIGATE =====
+        /* ---------- NAVIGATION ---------- */
         dashboardPage.clickProfileIcon();
         dashboardPage.clickProfileDetailsOption();
 
-        // ===== READ UPDATED DATA FROM EXCEL =====
-        String updFirstName = excel.getCellData("OTP_Data", "FirstName_Updated", 2);
-        String updLastName  = excel.getCellData("OTP_Data", "LastName_Updated", 2);
-        String updCity      = excel.getCellData("OTP_Data", "City_Updated", 2);
-        String updHeight = excel.getCellData("OTP_Data", "Height_Updated", 2);
-        String updWeight = excel.getCellData("OTP_Data", "Weight_Updated", 2);
+        /* ---------- UPDATED DATA FROM EXCEL ---------- */
+        String newFirstName = excel.getCellData("OTP_Data", "Edit_FirstName", 2);
+        String newLastName  = excel.getCellData("OTP_Data", "Edit_LastName", 2);
+        String newAddress   = excel.getCellData("OTP_Data", "Edit_Address1", 2);
+        String newCity      = excel.getCellData("OTP_Data", "Edit_City", 2);
+        String newPhone     = excel.getCellData("OTP_Data", "Edit_Phone", 2);
+        String newHeight    = excel.getCellData("OTP_Data", "Height_Updated", 2);
+        String newWeight    = excel.getCellData("OTP_Data", "Weight_Updated", 2);
 
-        profileDetailsPage.selectHeight(updHeight);
-        profileDetailsPage.selectWeight(updWeight);
+        /* ---------- EDIT ---------- */
+        editProfileDetailsPage.editFirstName(newFirstName);
+        editProfileDetailsPage.editLastName(newLastName);
+        editProfileDetailsPage.editAddress(newAddress);
+        editProfileDetailsPage.editCity(newCity);
+        editProfileDetailsPage.editPhone(newPhone);
+        editProfileDetailsPage.selectHeight(newHeight);
+        editProfileDetailsPage.selectWeight(newWeight);
+        editProfileDetailsPage.clickSave();
 
-        // ===== EDIT =====
-        addLog(Status.INFO, "Editing profile details");
+        /* ---------- RELOAD PROFILE ---------- */
+        dashboardPage.clickProfileIcon();
+        dashboardPage.clickProfileDetailsOption();
 
-        profileDetailsPage.editFirstName(updFirstName);
-        profileDetailsPage.editLastName(updLastName);
-        profileDetailsPage.editCity(updCity);
+        /* ---------- VALIDATION ---------- */
+        Assert.assertEquals(profileDetailsPage.getFirstName(), newFirstName);
+        Assert.assertEquals(profileDetailsPage.getLastName(), newLastName);
+        Assert.assertEquals(profileDetailsPage.getAddress(), newAddress);
+        Assert.assertEquals(profileDetailsPage.getCity(), newCity);
+        Assert.assertEquals(
+                profileDetailsPage.getPhone(),
+                PhoneUtil.normalize(newPhone)
+        );
 
-        profileDetailsPage.clickSave();
-
-        // ===== VALIDATE UPDATED DATA =====
-        addLog(Status.INFO, "Validating updated profile details");
-
-        Assert.assertEquals(profileDetailsPage.getFirstName(), updFirstName);
-        Assert.assertEquals(profileDetailsPage.getLastName(), updLastName);
-        Assert.assertEquals(profileDetailsPage.getCity(), updCity);
-
-        addLog(Status.PASS, "Profile details updated and validated successfully");
+        addLog(Status.PASS, "Profile edited and validated successfully");
     }
 }
